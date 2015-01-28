@@ -19,7 +19,8 @@ var context = {
   },
   fr: {
     key: 'valeur'
-  }
+  },
+  locales: ['en', 'fr']
 };
 
 describe('i18n', function () {
@@ -33,6 +34,15 @@ describe('i18n', function () {
       var source = '{{#i18n "key" language="fr"}}{{/i18n}}';
       var template = Handlebars.compile(source);
       template(context).should.equal('valeur');
+    });
+    it('should throw an error with new context', function() {
+      var source = '{{#each locales}}{{ i18n "key" language=this }}{{/each}}'
+      var template = Handlebars.compile(source);
+    });
+    it('should have access to root level context language', function () {
+      var source = '{{#each locales}}{{ i18n "key" language=this context=.. }}{{/each}}'
+      var template = Handlebars.compile(source);
+      template(context).should.equal('valuevaleur');
     });
   });
 });
